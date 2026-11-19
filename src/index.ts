@@ -1,3 +1,4 @@
+export { defaultLoadedMessage, type LoadOnCallOptions, loadOnCall } from "./load-on-call.js";
 export { defaultNote, RECALL_TOOL, type SetAside } from "./note.js";
 export {
   originalResult,

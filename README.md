@@ -72,6 +72,24 @@ A ref is only a locator, not a permission. If several people share one conversat
 recallTool({ visible: (messages) => messages.filter((m) => belongsTo(m, userId)) });
 ```
 
+### With tool search
+
+If your conversation defers tools behind `tool_search`, install `loadOnCall` too. A `tool_search` result is how the model knows which tools it has loaded. Once that result is set aside, the model can call a related tool by a name it guesses, one it never loaded, and pi-durable answers that the tool is not available. With `loadOnCall`, such a call loads the tool, and the model is told to call it again:
+
+```ts
+import { loadOnCall } from "pi-durable-prune";
+
+registry.install(
+  defineExtension({
+    name: "prune",
+    tools: [recallTool()],
+    hooks: [loadOnCall({ deferred: deferredToolNames })],
+  }),
+);
+```
+
+`deferred` is the names of your deferred tools, or a test on a name. Calls of any other unknown name get pi-durable's error as before. It also helps a conversation that unloads tools it has not used for a while. `message` changes the reply (default `defaultLoadedMessage`).
+
 ### Forks and child conversations
 
 A conversation started from another one cannot recall its parent's refs. Seed it with the originals instead:

@@ -1,6 +1,6 @@
 {
   "name": "pi-durable-prune",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Context pruning for pi-durable agents: set aside large earlier tool results behind a recall ref without breaking the prompt cache.",
   "license": "MIT",
   "type": "module",

@@ -51,13 +51,19 @@ export const testTools = [
 
 export type Call = [name: string, args: Record<string, unknown>];
 
-export async function openHarness(options: { extraTools?: ToolRegistration[]; agent?: object } = {}) {
+export async function openHarness(
+  options: { extraTools?: ToolRegistration[]; agent?: object; hooks?: unknown[] } = {},
+) {
   const faux = fauxProvider({ provider: "faux", models: [{ id: "m", contextWindow: 1_000_000 }] });
   const models = createModels();
   models.setProvider(faux.provider);
   const registry = createRegistry();
   registry.install(
-    defineExtension({ name: "test", tools: [...testTools, ...(options.extraTools ?? [])] }),
+    defineExtension({
+      name: "test",
+      tools: [...testTools, ...(options.extraTools ?? [])],
+      hooks: (options.hooks ?? []) as never,
+    }),
   );
   const harness = await Harness.open(new MemoryStorage(), { models, registry }, ctx);
   const root: Conversation = await harness.root(ctx, {

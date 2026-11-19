@@ -2,6 +2,7 @@ import type { Message } from "@earendil-works/pi-ai";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   defaultNote,
+  loadOnCall,
   originalResult,
   PRUNE_ENTRY_KIND,
   type PrunePolicy,
@@ -10,6 +11,7 @@ import {
   withOriginals,
 } from "../src/index.js";
 import { ctx, fauxAssistantMessage, fauxText, openHarness } from "./harness.js";
+import { defineTool } from "@earendil-works/pi-durable";
 
 const POLICY: PrunePolicy = { keep: ["use_skill"] };
 const isNote = (m: string) => m.includes("Set aside to save room");
@@ -192,3 +194,29 @@ describe("recallTool", () => {
   });
 });
 
+
+describe("loadOnCall", () => {
+  it("loads a deferred tool the model calls without searching, and the retry runs it", async () => {
+    const vendors = defineTool({
+      name: "list_vendors",
+      description: "List vendors",
+      parameters: { type: "object", properties: {} },
+      deferred: true,
+      replay: "safe",
+      execute: async () => ({ output: [{ type: "text", text: "Acme, Summit" }] }),
+    });
+    const h = await setup({ extraTools: [vendors], hooks: [loadOnCall({ deferred: ["list_vendors"] })] });
+    await h.ask("vendors?", [
+      ["list_vendors", {}],
+      ["list_vendors", {}],
+    ]);
+    const results = (await h.raw()).filter((m) => m.role === "toolResult");
+    expect(results.map((m) => m.isError)).toEqual([true, false]);
+    expect(JSON.stringify(results[1]?.content)).toContain("Acme, Summit");
+    // A name that is not a deferred tool keeps pi-durable's own error.
+    await h.ask("again", [["no_such_tool", {}]]);
+    const last = (await h.raw()).filter((m) => m.role === "toolResult").at(-1);
+    expect(last?.isError).toBe(true);
+    expect(JSON.stringify(last?.content)).not.toContain("loaded now");
+  });
+});
