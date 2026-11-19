@@ -105,12 +105,14 @@ The trade-off: the first request after a prune re-writes the cache from the firs
 
 ## Measured
 
-On 683 chats from our own development use of a pi-durable agent that reads business apps (mail, spreadsheets, documents, web pages):
+We replayed 686 chats from our own development and testing (not production) of a pi-durable agent that reads business apps: mail, spreadsheets, documents, web pages. The policy was `minChars: 2000`, `keepAsks: 1`, with three tools kept whole (loaded skills and knowledge pages). Sizes are estimates: message and system-prompt characters ÷ 4, tool definitions not counted. Each figure is the share of the next request saved.
 
-- From the second turn on, old tool output was about **60%** of the conversation re-read on each request.
-- Long chats shrank by **55–78%** with the default policy.
+- **Long chats save a lot.** The three longest saved 75% (28 asks, about 157k → 39k tokens), 63% (25 asks) and 59% (18 asks).
+- **Typical chats save a little.** Across the 15 chats with 5 or more asks, the median saving is 22.5%. Five of the 15 save nothing. Overall it is 53%, because the long chats dominate.
+- **Short chats save nothing, by design.** Nothing is set aside before the third ask. Most chats are short: of 686 chats, 141 reached a second ask and 44 a third.
+- **What gets set aside** is mostly tool search results (44%), web pages read (22%) and web search results (12%).
 
-Your numbers depend on how much your agent reads. A chat agent that mostly talks will see little change; an agent that reads large records, files or pages will see the most.
+Your numbers depend on how much your agent reads and how long its conversations run. An agent that mostly talks, or whose conversations are short, will see little change. Long conversations that read large records, files or pages will see the most.
 
 ## Limits
 
