@@ -1,0 +1,14 @@
+diff --git a/dist/harness/compaction.js b/dist/harness/compaction.js
+index 54f3ef34ddf1bf85e3ad9c41bdbd216c081a476f..5c6c97521682095244dff7f09b43696a4823df68 100644
+--- a/dist/harness/compaction.js
++++ b/dist/harness/compaction.js
+@@ -293,6 +293,9 @@ export function estimateContext(view, extra) {
+     for (let index = view.entries.length - 1; index >= 0 && measured === undefined; index--) {
+         if (view.entries[index].id <= after)
+             continue;
++        // A measurement older than a context edit counted what the edit removed or replaced.
++        if ((view.entries[index].edits?.length ?? 0) > 0)
++            break;
+         measured = view.contributions[index].findLast((message) => message.role === "assistant" && calculateContextTokens(message.usage) > 0);
+     }
+     const from = measured === undefined ? 0 : view.messages.lastIndexOf(measured) + 1;
