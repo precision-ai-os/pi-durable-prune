@@ -1,6 +1,6 @@
 {
   "name": "pi-durable-prune",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Context pruning for pi-durable agents: set aside large earlier tool results behind a recall ref without breaking the prompt cache.",
   "license": "MIT",
   "type": "module",
@@ -14,7 +14,10 @@
   },
   "files": ["dist", "README.md", "LICENSE"],
   "sideEffects": false,
-  "keywords": ["pi", "pi-durable", "agent", "llm", "context", "pruning", "prompt-cache"],
+  "pi": {
+    "image": "https://raw.githubusercontent.com/precision-ai-os/pi-durable-prune/main/docs/long-chat.png"
+  },
+  "keywords": ["pi-package", "pi", "pi-durable", "agent", "llm", "context", "pruning", "prompt-cache"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/precision-ai-os/pi-durable-prune.git"

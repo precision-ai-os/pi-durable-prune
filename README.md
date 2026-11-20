@@ -2,6 +2,10 @@
 
 Context pruning for [pi-durable](https://github.com/earendil-works/pi/tree/main/packages/durable) agents.
 
+> A library for apps built on pi-durable, used from your own code. It is not a Pi coding-agent extension: `pi install` adds nothing to the `pi` CLI.
+
+![One long chat, request by request: 157k tokens without pruning, 39k with](docs/long-chat.png)
+
 Agents that read things (files, web pages, API responses, database rows) carry every one of those results in the conversation, and re-send them to the model on every later turn. Most of that is stale after the turn that used it. This package replaces large tool results from earlier asks with a short note in what the model reads, and gives the model a tool to read any of them back in full. The originals stay in the transcript untouched.
 
 It is built on pi-durable's own context edits, so it is durable, crash-safe and replay-safe like everything else in the transcript, and it is written so that the provider's prompt cache keeps working.
