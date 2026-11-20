@@ -1,8 +1,12 @@
 {
   "name": "pi-durable-prune",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Context pruning for pi-durable agents: set aside large earlier tool results behind a recall ref without breaking the prompt cache.",
   "license": "MIT",
+  "author": {
+    "name": "Precision",
+    "url": "https://getprecision.ai"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

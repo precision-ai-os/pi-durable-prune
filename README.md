@@ -156,4 +156,4 @@ npx tsx scripts/estimate-gap.ts
 
 ## License
 
-MIT
+MIT. Built by [Precision](https://getprecision.ai/?utm_source=pi-durable-prune), which runs pi-durable agents for professional service firms.
